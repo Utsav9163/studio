@@ -65,7 +65,7 @@ export default function Canvas({ activeTool, setActiveTool, addElement }: Canvas
   const handlePointerUp = async (e: PointerEvent<HTMLCanvasElement>) => {
     if (isDrawing) {
       await stopDrawing();
-    } else if (['sticky-note', 'rectangle', 'circle'].includes(activeTool)) {
+    } else if (['rectangle', 'circle'].includes(activeTool)) {
       addElement(activeTool, { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY });
     }
   };
@@ -144,7 +144,7 @@ export default function Canvas({ activeTool, setActiveTool, addElement }: Canvas
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerLeave}
         className="w-full h-full"
-        style={{ touchAction: 'none', cursor: (activeTool === 'draw' || activeTool === 'smart-shape') ? 'crosshair' : ['sticky-note', 'rectangle', 'circle'].includes(activeTool) ? 'cell' : 'default' }}
+        style={{ touchAction: 'none', cursor: (activeTool === 'draw' || activeTool === 'smart-shape') ? 'crosshair' : ['rectangle', 'circle'].includes(activeTool) ? 'cell' : 'default' }}
       />
       {isProcessing && (
         <div className="absolute inset-0 bg-background/50 flex flex-col items-center justify-center gap-4 backdrop-blur-sm">
