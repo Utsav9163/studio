@@ -5,7 +5,6 @@ import {
   Pen,
   RectangleHorizontal,
   Circle,
-  Type,
   Upload,
   Sparkles,
 } from 'lucide-react';
@@ -28,7 +27,6 @@ const tools: { name: Tool; icon: React.ElementType; tooltip: string }[] = [
   { name: 'smart-shape', icon: Sparkles, tooltip: 'Smart Shape (AI)' },
   { name: 'rectangle', icon: RectangleHorizontal, tooltip: 'Rectangle' },
   { name: 'circle', icon: Circle, tooltip: 'Circle' },
-  { name: 'text', icon: Type, tooltip: 'Text' },
   { name: 'image', icon: Upload, tooltip: 'Upload Image' },
 ];
 
