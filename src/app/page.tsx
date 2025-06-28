@@ -1,9 +1,7 @@
 'use client';
 import { useState } from 'react';
-import Header from '@/components/canvas3d/Header';
 import Sidebar from '@/components/canvas3d/Sidebar';
 import Canvas from '@/components/canvas3d/Canvas';
-import LiveCursors from '@/components/canvas3d/LiveCursors';
 import StickyNote from '@/components/canvas3d/StickyNote';
 import { type Tool } from '@/lib/types';
 import Rectangle from '@/components/canvas3d/Rectangle';
@@ -48,20 +46,16 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-dvh w-full flex-col font-body text-foreground">
-      <Header />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar activeTool={activeTool} setActiveTool={setActiveTool} />
-        <main className="flex-1 relative bg-background overflow-hidden">
-          <Canvas
-            activeTool={activeTool}
-            setActiveTool={setActiveTool}
-            addElement={addElement}
-          />
-          <LiveCursors />
-          {elements.map(renderElement)}
-        </main>
-      </div>
+    <div className="flex h-dvh w-full flex-row font-body text-foreground">
+      <Sidebar activeTool={activeTool} setActiveTool={setActiveTool} />
+      <main className="flex-1 relative bg-background overflow-hidden">
+        <Canvas
+          activeTool={activeTool}
+          setActiveTool={setActiveTool}
+          addElement={addElement}
+        />
+        {elements.map(renderElement)}
+      </main>
     </div>
   );
 }
