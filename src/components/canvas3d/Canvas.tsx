@@ -8,9 +8,10 @@ import { Loader2 } from 'lucide-react';
 interface CanvasProps {
   activeTool: Tool;
   setActiveTool: (tool: Tool) => void;
+  addElement: (tool: Tool, position: { x: number; y: number }) => void;
 }
 
-export default function Canvas({ activeTool, setActiveTool }: CanvasProps) {
+export default function Canvas({ activeTool, setActiveTool, addElement }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -61,10 +62,18 @@ export default function Canvas({ activeTool, setActiveTool }: CanvasProps) {
     ctx.stroke();
   };
 
+  const handlePointerUp = async (e: PointerEvent<HTMLCanvasElement>) => {
+    if (isDrawing) {
+      await stopDrawing();
+    } else if (['sticky-note', 'rectangle', 'circle'].includes(activeTool)) {
+      addElement(activeTool, { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY });
+    }
+  };
+  
   const stopDrawing = async () => {
     const ctx = getCanvasContext();
     const canvas = canvasRef.current;
-    if (!ctx || !canvas) return;
+    if (!ctx || !canvas || !isDrawing) return;
     
     setIsDrawing(false);
     ctx.closePath();
@@ -120,16 +129,22 @@ export default function Canvas({ activeTool, setActiveTool }: CanvasProps) {
     }
   };
 
+  const handlePointerLeave = async () => {
+    if (isDrawing) {
+        await stopDrawing();
+    }
+  }
+
   return (
     <div className="w-full h-full relative">
       <canvas
         ref={canvasRef}
         onPointerDown={startDrawing}
         onPointerMove={draw}
-        onPointerUp={stopDrawing}
-        onPointerLeave={stopDrawing}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerLeave}
         className="w-full h-full"
-        style={{ touchAction: 'none', cursor: (activeTool === 'draw' || activeTool === 'smart-shape') ? 'crosshair' : 'default' }}
+        style={{ touchAction: 'none', cursor: (activeTool === 'draw' || activeTool === 'smart-shape') ? 'crosshair' : ['sticky-note', 'rectangle', 'circle'].includes(activeTool) ? 'cell' : 'default' }}
       />
       {isProcessing && (
         <div className="absolute inset-0 bg-background/50 flex flex-col items-center justify-center gap-4 backdrop-blur-sm">
